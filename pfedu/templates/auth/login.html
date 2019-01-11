@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 {% block nav %}{% endblock %}
+{% block nav_info %}{% endblock %}
 {% block body %}
-  <h6 class="docs-header">Login</h6>
-  <form action="{{ url_for('auth.login') }}" method=post>
-	  {{ form.hidden_tag() }}
-    <div class="row">
-      {{ form.username.label }}
-      {{ form.username(size=32,autocapitalize="none") }}
-      {% for error in form.username.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </div>
-    <div class="row">
-      {{ form.passwd.label }}
-      {{ form.passwd(size=32) }}
-      {% for error in form.passwd.errors %}
-      <span style"color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </div>
-    <div class="row">
-      {{ form.submit(class_="button-primary") }}
-    </div>
-  </form>
+<h6 class="docs-header">Login</h6>
+<form action="{{ url_for('auth.login') }}" method=post>
+  {{ form.hidden_tag() }}
+  <div class="row">
+    {{ form.username.label }}
+    {{ form.username(size=32,autocapitalize="none") }}
+    {% for error in form.username.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </div>
+  <div class="row">
+    {{ form.passwd.label }}
+    {{ form.passwd(size=32) }}
+    {% for error in form.passwd.errors %}
+    <span style"color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </div>
+  <div class="row">
+    {{ form.submit(class_="button-primary") }}
+  </div>
+</form>
 {% endblock %}

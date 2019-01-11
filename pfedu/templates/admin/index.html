@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block body %}
+  <h6 class="docs-header">Welcome to the admin interface!</h6>
+  <p>The following actions are available:</p>
+  <ul>
+  <li>To add molecules, click on the drop-down menu above and select add.</li>
+  <li>To add users/temperature, click on the drop-down menu above and select add.</li>
+  </ul>
+
+  <h6 class="docs-header">Download data</h6>
+  <p>The data is available per molecule in CSV format,</p>
+
+  <ul>
+  {% for mol in mols %}
+  <li><a class="button" href="{{ url_for('admin.get_data', mol_id=mol.id) }}">{{ mol.name }}</a></li>
+  {% endfor %}
+  </ul>
+
+  <p>or in a zip file containing all molecules.</p>
+  <a class="button" href="{{ url_for('admin.get_data_all') }}">Download all data</a>
+{% endblock %}

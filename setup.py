@@ -1,0 +1,29 @@
+from setuptools import find_packages, setup
+
+setup(
+    name='pfedu',
+    version='0.1',
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
+    long_description=open('README.rst').read(),
+    install_requires=[
+        'flask',
+        'Click',
+        'Flask',
+        'Flask-Login',
+        'Flask-SQLAlchemy',
+        'Flask-WTF',
+        'itsdangerous',
+        'Jinja2',
+        'MarkupSafe',
+        'numpy',
+        'pandas',
+        'python-dateutil',
+        'pytz',
+        'six',
+        'SQLAlchemy',
+        'Werkzeug',
+        'WTForms',
+    ],
+)

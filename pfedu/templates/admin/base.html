@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Administration{% endblock %}
+{% block nav %}
+<!-- Listing -->
+<li class="navbar-item">
+  <a class="navbar-link" href="{{ url_for('index') }}">Home</a>
+</li>
+
+<!-- Add -->
+<li class="navbar-item">
+  <a class="navbar-link" href="#" data-popover="#molNavPopover">Molecules</a>
+  <div id="molNavPopover" class="popover">
+    <ul class="popover-list">
+      <li class="popover-item">
+        <a class="popover-link" href="{{ url_for('admin.add_mol') }}">Add</a>
+      </li>
+      <li class="popover-item">
+        <a class="popover-link" href="{{ url_for('admin.list_mol') }}">List</a>
+      </li>
+    </ul>
+  </div>
+</li>
+
+<li class="navbar-item">
+  <a class="navbar-link" href="#" data-popover="#userNavPopover">Users</a>
+  <div id="userNavPopover" class="popover">
+    <ul class="popover-list">
+      <li class="popover-item">
+        <a class="popover-link" href="{{ url_for('admin.add_user') }}">Add</a>
+      </li>
+      <li class="popover-item">
+        <a class="popover-link" href="{{ url_for('admin.list_user') }}">List</a>
+      </li>
+    </ul>
+  </div>
+</li>
+
+<li class="navbar-item">
+  <a class="navbar-link" href="{{ url_for('admin.passwd') }}">Change passord</a>
+</li>
+
+{% endblock %}
+{% block auth %}
+                <li class="navbar-item"><a class="navbar-link" href="{{ url_for('auth.logout') }}">Log out</a></li>
+                <li class="navbar-item"><div class="navbar-info">{{ current_user.username }}</div></li>
+{% endblock %}

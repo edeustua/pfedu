@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h3>List {{ molecule_names[molecule]|safe }} entries</h3>
+  <table class=entries>
+    <tr>
+      <th>T(K)</th>
+			<th>q<sub>trans</sub></th>
+			<th>q<sub>rot</sub></th>
+			<th>q<sub>vib</sub></th>
+			<th>q<sub>elec</sub></th>
+      <th>Action</th>
+    </tr>
+  {% for entry in entries %}
+    <tr>
+      <td>{{ entry.temp }}</td>
+      <td>{{ '%.4E' | format(entry.q_trans) }}</td>
+      <td>{{ '%.4E' | format(entry.q_rot) }}</td>
+      <td>{{ '%.4E' | format(entry.q_vib) }}</td>
+      <td>{{ '%.4E' | format(entry.q_elec) }}</td>
+      <td>
+	{% if entry.temp == current_user.temp %}
+        <a href="{{ url_for('edit_entry', molecule=molecule, post_id=entry.id) }}">Edit</a>
+        <a href="{{ url_for('edit_entry', molecule=molecule, post_id=entry.id, rem='y') }}">Delete</a>
+	{% endif %}
+			</td>
+    </tr>
+  {% else %}
+    <tr>
+      <td colspan=7><em>There are no entries</em></td>
+    </tr>
+  {% endfor %}
+  </table>
+  <a href="{{ url_for('add_entry', molecule=molecule) }}">Add entry</a>
+{% endblock %}

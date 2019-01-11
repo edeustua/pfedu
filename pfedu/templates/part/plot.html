@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h3>Plot {{ molecule_names[molecule]|safe }}</h3>
+    <div class="row">
+			<canvas id="myChart" width="400" height="400"></canvas>
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+			datasets: [{
+        label: "q trans",
+				borderColor: 'rgba(255,99,132,1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+				borderWidth: 1,
+				data: [
+					{% for i in data_trans %}
+					{x: {{ i[0] }}, y: {{ i[1] }} },
+					{% endfor %}
+				],
+			},{
+				label: "q rot",
+				borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+				borderWidth: 1,
+				data: [
+					{% for i in data_rot %}
+					{x: {{ i[0] }}, y: {{ i[1] }} },
+					{% endfor %}
+				],
+        },{
+				label: "q vib",
+				borderColor: 'rgba(103, 237, 127, 1)',
+        backgroundColor: 'rgba(103, 237, 127, 0.2)',
+				borderWidth: 1,
+				data: [
+					{% for i in data_vib %}
+					{x: {{ i[0] }}, y: {{ i[1] }} },
+					{% endfor %}
+				],
+        },{
+				label: "q elec",
+				borderColor: 'rgba(130, 87, 177, 1)',
+        backgroundColor: 'rgba(130, 87, 177, 0.2)',
+				borderWidth: 1,
+				data: [
+					{% for i in data_elec %}
+					{x: {{ i[0] }}, y: {{ i[1] }} },
+					{% endfor %}
+				],
+        },
+			]
+    },
+    options: {
+			  animation: false,
+        scales: {
+					  xAxes: [{
+							type: 'linear',
+							position: 'bottom',
+							scaleLabel: {
+								display: true,
+								labelString: 'Temperature (K)'
+							}
+						}],
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                },
+							scaleLabel: {
+								display: true,
+								labelString: 'Partition function (q)'
+							}
+            }]
+        }
+    }
+});
+</script>
+		</div>
+{% endblock %}

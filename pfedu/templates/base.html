@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <!-- Basic Page Needs -->
+    <meta charset="utf-8">
+    <title>CEM 484: Class Project</title>
+    <meta name="description" content="">
+    <meta name="author" content="Emiliano Deustua">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT -->
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+    <!--  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script src="{{ url_for('static', filename='site.js') }}"></script>
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  </head>
+  <body>
+    <div class="container">
+
+      <section class="header">
+        <h2>{% block title %}CEM 484: Class Project 1{% endblock %}</h2>
+      </section>
+
+      <div class="row">
+        <div class="navbar-spacer"></div>
+        <nav class="navbar">
+          <div class="container">
+            <ul class="navbar-list">
+              {% block nav %}
+              <!-- Listing -->
+              <li class="navbar-item">
+                <a class="navbar-link" href="#" data-popover="#listNavPopover">List</a>
+                <div id="listNavPopover" class="popover">
+                  <ul class="popover-list">
+                    {% for mol in mols %}
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.show', mol_id=mol.id) }}">
+                        {{ mol.html|safe }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+
+              <!-- Add -->
+              <li class="navbar-item">
+                <a class="navbar-link" href="#" data-popover="#addNavPopover">Add</a>
+                <div id="addNavPopover" class="popover">
+                  <ul class="popover-list">
+                    {% for mol in mols %}
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.add', mol_id=mol.id) }}">
+                        {{ mol.html|safe }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+
+              <!-- Plot -->
+              <li class="navbar-item">
+                <a class="navbar-link" href="#" data-popover="#plotNavPopover">Plot</a>
+                <div id="plotNavPopover" class="popover">
+                  <ul class="popover-list">
+                    {% for mol in mols %}
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.plot', mol_id=mol.id) }}">
+                        {{ mol.html|safe }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+              {% endblock %}
+
+              {% if current_user.admin %}
+              <li class="navbar-item">
+                <a class="navbar-link" href="{{ url_for('admin.index') }}">Admin</a>
+              </li>
+              {% endif %}
+
+              {% if not current_user.is_authenticated %}
+              <li class="navbar-item">
+                <a class="navbar-link" href="{{ url_for('auth.login') }}">Log in</a>
+              </li>
+              {% else %}
+              <li class="navbar-item">
+                <a class="navbar-link" href="{{ url_for('auth.logout') }}">Log out</a>
+              </li>
+              {% endif %}
+            </ul>
+
+            <!-- Auth -->
+            {% block nav_info %}
+            {% if current_user.admin %}
+            <div class="navbar-info">Logged in as {{ current_user.username }}</div>
+            {% else %}
+            <div class="navbar-info">Logged in as T = {{ current_user.username }} (K)</div>
+            {% endif %}
+            {% endblock %}
+
+          </div>
+        </nav>
+      </div>
+
+
+      <div class="docs-section">
+        {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div>
+        {% endfor %}
+        {% block body %}{% endblock %}
+      </div>
+    </div>
+  </body>

@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% block body %}
+<h3>Change password</h3>
+<form action="{{ url_for('admin.passwd') }}" method=post class=add-entry>
+  {{ form.hidden_tag() }}
+
+  {{ form.passwd.label }}
+  {{ form.passwd(size=18) }}
+  {% for error in form.passwd.errors %}
+  <br /><span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+
+  {{ form.confirm.label }}
+  {{ form.confirm(size=18) }}
+  {% for error in form.confirm.errors %}
+  <br /><span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+
+  <div class="row">
+    {{ form.submit(class_="button-primary") }}
+  </div>
+
+</form>
+{% endblock %}

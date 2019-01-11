@@ -1,0 +1,3 @@
+graft pfedu/static
+graft pfedu/templates
+global-exclude *.pyc

@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block body %}
+<h3>List molecules</h3>
+<table class=entries>
+  <tr>
+    <th>Molecule</th>
+    <th>HTML</th>
+    <th>Action</th>
+  </tr>
+  {% for mol in mols %}
+  <tr>
+    <td>{{ mol.name }}</td>
+    <td>{{ mol.html|safe }}</td>
+    <td>
+      <a href="{{ url_for('admin.edit_mol', mol_id=mol.id) }}">Edit</a>
+      <a href="{{ url_for('admin.delete_mol', mol_id=mol.id) }}">Delete</a>
+    </td>
+  </tr>
+  {% else %}
+  <tr>
+    <td colspan=7><em>There are no entries</em></td>
+  </tr>
+  {% endfor %}
+</table>
+<a href="{{ url_for('admin.add_mol') }}">Add entry</a>
+{% endblock %}

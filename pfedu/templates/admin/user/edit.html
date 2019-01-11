@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block body %}
+<h3>Edit {{ mol.name|safe }}</h3>
+<form action="{{ url_for('routes.edit', mol_id=mol.id, st_id=st_id) }}" method=post class=edit-entry>
+  {{ form.hidden_tag() }}
+  <div class="row">
+    {% if current_user.admin %}
+    <div class="twelve columns">
+      {{ form.temp.label }}
+      {{ form.temp(size=32) }}
+      {% for error in form.temp.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="twelve columns">
+      <label>T(K)</label>
+      <p>{{ current_user.username }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="six columns">
+      {{ form.q_trans.label }}
+      {{ form.q_trans(size=32) }}
+      {% for error in form.q_trans.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="six columns">
+      {{ form.q_rot.label }}
+      {{ form.q_rot(size=32) }}
+      {% for error in form.q_rot.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="six columns">
+      {{ form.q_vib.label }}
+      {{ form.q_vib(size=32) }}
+      {% for error in form.q_vib.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="six columns">
+      {{ form.q_elec.label }}
+      {{ form.q_elec(size=32) }}
+      {% for error in form.q_elec.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row">
+    {{ form.submit(class_="button-primary", value="Edit") }}
+  </div>
+
+</form>
+{% endblock %}

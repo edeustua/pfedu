@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+{% block body %}
+<h3>{{ title }} user</h3>
+<form action="{{ url_for('admin.add_user') }}" method=post class=add-entry>
+  {{ form.hidden_tag() }}
+
+  <p>To add a single user use the following field:</p>
+  {{ form.username.label }}
+  {{ form.username(size=10) }}
+  {% for error in form.username.errors %}
+  <br /><span style="color: red;">[{{ error }}]</span>
+  {% endfor %}
+  <p>One can also add a range of users based on temperature. This works by
+  setting a start, end, and step size. For example, <strong>start</strong>
+  of 100, <strong>end</strong> of 150, and <strong>step size</strong> of 5
+  will generate 100, 105, 110, 115, ..., 150.</p>
+  <div class="row">
+    <div class="four columns">
+      {{ form.start_temp.label }}
+      {{ form.start_temp(size=10) }}
+      {% for error in form.start_temp.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="four columns">
+      {{ form.end_temp.label }}
+      {{ form.end_temp(size=10) }}
+      {% for error in form.end_temp.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="four columns">
+      {{ form.step_temp.label }}
+      {{ form.step_temp(size=10) }}
+      {% for error in form.step_temp.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row">
+    {{ form.submit(class_="button-primary", value=title) }}
+  </div>
+
+</form>
+{% endblock %}

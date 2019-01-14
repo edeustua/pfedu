@@ -8,6 +8,10 @@
 {% endif %}
 
     {{ form.hidden_tag() }}
+    <p>To add a molecule for the projects, fill in the name and HTML fields below.
+    The HTML field is not required, but can be used to include super- and subindices.
+    For example, SO2 can be written as SO&lt;sub&gt;2&lt;/sub&gt; in the HTML fields to yield
+    SO<sub>2</sub>.</p>
 
     {{ form.name.label }}
     {{ form.name(size=20) }}

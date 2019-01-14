@@ -93,6 +93,14 @@
 	font-family: "Roboto", sans-serif;
 }
 
+.title-link {
+  text-decoration: none;
+  color: #222;
+}
+.title-link:hover {
+  color: #222;
+}
+
 /* Larger than phone */
 @media (min-width: 550px) {
   .header {

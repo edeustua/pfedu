@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Administration{% endblock %}
 {% block nav %}
-<!-- Listing -->
+
+<!-- Data -->
 <li class="navbar-item">
-  <a class="navbar-link" href="{{ url_for('index') }}">Home</a>
+  <a class="navbar-link" href="{{ url_for('admin.index') }}">Data</a>
 </li>
 
-<!-- Add -->
 <li class="navbar-item">
   <a class="navbar-link" href="#" data-popover="#molNavPopover">Molecules</a>
   <div id="molNavPopover" class="popover">
@@ -39,7 +39,12 @@
   <a class="navbar-link" href="{{ url_for('admin.passwd') }}">Change passord</a>
 </li>
 
+<li class="navbar-item">
+  <a class="navbar-link" href="{{ url_for('index') }}">Go Back</a>
+</li>
+
 {% endblock %}
+{% block nav_admin %}{% endblock %}
 {% block auth %}
                 <li class="navbar-item"><a class="navbar-link" href="{{ url_for('auth.logout') }}">Log out</a></li>
                 <li class="navbar-item"><div class="navbar-info">{{ current_user.username }}</div></li>

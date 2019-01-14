@@ -115,7 +115,14 @@ def add_user():
 
     form = UserForm()
     if form.validate_on_submit():
-        if form.start_temp and form.end_temp:
+        if form.username.data:
+            # Temporary username
+            i = str(form.username.data)
+            digs = [int(x) for x in str(i)]
+            user = User(username=str(i),admin=False)
+            user.set_password(str(sum(digs)))
+            db.session.add(user)
+        elif form.start_temp.data and form.end_temp.data:
             start = int(form.start_temp.data)
             end = int(form.end_temp.data)
             step = int(form.step_temp.data)
@@ -124,6 +131,7 @@ def add_user():
                 user = User(username=str(i),admin=False)
                 user.set_password(str(sum(digs)))
                 db.session.add(user)
+
         try:
             db.session.commit()
         except IntegrityError:

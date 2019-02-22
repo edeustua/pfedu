@@ -1,34 +1,54 @@
 {% extends "base.html" %}
 {% block body %}
 <h3>List {{ mol.html|safe }}</h3>
-<table class=entries>
-  <tr>
-    <th>T(K)</th>
-    <th>q<sub>trans</sub></th>
-    <th>q<sub>rot</sub></th>
-    <th>q<sub>vib</sub></th>
-    <th>q<sub>elec</sub></th>
-    <th>Action</th>
-  </tr>
-  {% for st in sts %}
-  <tr>
-    <td>{{ st.temp }}</td>
-    <td>{{ '%.4E' | format(st.q_trans) }}</td>
-    <td>{{ '%.4E' | format(st.q_rot) }}</td>
-    <td>{{ '%.4E' | format(st.q_vib) }}</td>
-    <td>{{ '%.4E' | format(st.q_elec) }}</td>
-    <td>
-      {% if st.temp|int == current_user.username|int or current_user.admin %}
-      <a href="{{ url_for('routes.edit', mol_id=mol.id, st_id=st.id) }}">Edit</a>
-      <a href="{{ url_for('routes.delete', mol_id=mol.id, st_id=st.id) }}">Delete</a>
-      {% endif %}
-    </td>
-  </tr>
-  {% else %}
-  <tr>
-    <td colspan=7><em>There are no entries</em></td>
-  </tr>
-  {% endfor %}
+<table id="table_test" class="display entries">
+  <thead>
+    <tr>
+      <th>T(K)</th>
+      <th>q<sub>trans</sub></th>
+      <th>q<sub>rot</sub></th>
+      <th>q<sub>vib</sub></th>
+      <th>q<sub>elec</sub></th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for st in sts %}
+    <tr>
+      <td>{{ st.temp }}</td>
+      <td>{{ '%.4E' | format(st.q_trans) }}</td>
+      <td>{{ '%.4E' | format(st.q_rot) }}</td>
+      <td>{{ '%.4E' | format(st.q_vib) }}</td>
+      <td>{{ '%.4E' | format(st.q_elec) }}</td>
+      <td>
+        {% if st.temp|int == current_user.username|int or current_user.admin %}
+        <a href="{{ url_for('routes.edit', mol_id=mol.id, st_id=st.id) }}">Edit</a>
+        <a href="{{ url_for('routes.delete', mol_id=mol.id, st_id=st.id) }}">Delete</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan=7><em>There are no entries</em></td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 <a href="{{ url_for('routes.add', mol_id=mol.id) }}">Add entry</a>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script type="text/javascript" chartset="utf8">
+  $(document).ready( function () {
+    $('#table_test').DataTable(
+      // Disable ordering on the Action column
+      {
+        "columnDefs": [
+          { "orderable": false, "targets": 5 }
+        ]
+      }
+    );
+  });
+</script>
+
 {% endblock %}

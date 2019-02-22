@@ -6,6 +6,7 @@ from flask_login import login_required, current_user
 
 from pfedu.forms import StatMechForm
 from pfedu.models import db, Molecule, StatMech
+import json
 
 bp = Blueprint('routes', __name__)
 
@@ -130,22 +131,52 @@ def plot(mol_id):
     mols = Molecule.query.all()
     mol = Molecule.query.filter_by(id=mol_id).first()
 
-    data_trans = []
-    data_rot = []
-    data_vib = []
-    data_elec = []
+    data_trans = {"temp": [], "q": []}
+    data_rot = {"temp": [], "q": []}
+    data_vib = {"temp": [], "q": []}
+    data_elec = {"temp": [], "q": []}
     if mol:
         sts = None
         sts = StatMech.query.filter_by(mol_id=mol_id).order_by(StatMech.temp).all()
         for st in sts:
-            data_trans.append((st.temp, st.q_trans))
-            data_rot.append((st.temp, st.q_rot))
-            data_vib.append((st.temp, st.q_vib))
-            data_elec.append((st.temp, st.q_elec))
+            data_trans["temp"].append(st.temp)
+            data_trans["q"].append(st.q_trans)
+            data_rot["temp"].append(st.temp)
+            data_rot["q"].append(st.q_rot)
+            data_vib["temp"].append(st.temp)
+            data_vib["q"].append(st.q_vib)
+            data_elec["temp"].append(st.temp)
+            data_elec["q"].append(st.q_elec)
+
+        graph = [
+                dict(
+                    x=data_trans["temp"],
+                    y=data_trans["q"],
+                    name="q trans",
+                    line= dict(
+                        color='rgb(164, 194, 244)',
+                        )
+                    ),
+                dict(
+                    x=data_rot["temp"],
+                    y=data_rot["q"],
+                    name="q rot",
+                    ),
+                dict(
+                    x=data_vib["temp"],
+                    y=data_vib["q"],
+                    name="q vib",
+                    ),
+                dict(
+                    x=data_elec["temp"],
+                    y=data_elec["q"],
+                    name="q elec",
+                    )]
+
+        data = json.dumps(graph)
 
         return render_template('plot.html', mol=mol, mols=mols,
-                data_trans=data_trans, data_rot=data_rot,
-                data_vib=data_vib, data_elec=data_elec)
+                data=data)
 
     else:
         flash('Molecule not found!')

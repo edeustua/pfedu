@@ -43,23 +43,25 @@ def process(mol_id, form, st=None):
         st.temp = temp
         st.q_trans = float(form.q_trans.data)
         st.q_rot = float(form.q_rot.data)
-        st.q_vib = float(form.q_vib.data)
-        st.q_elec = float(form.q_elec.data)
+        #st.q_vib = float(form.q_vib.data)
+        #st.q_elec = float(form.q_elec.data)
         st.user_id = current_user.id
 
     else:
         try:
             q_trans = float(form.q_trans.data)
             q_rot = float(form.q_rot.data)
-            q_vib = float(form.q_vib.data)
-            q_elec = float(form.q_elec.data)
+            #q_vib = float(form.q_vib.data)
+            #q_elec = float(form.q_elec.data)
             user_id = current_user.id
         except ValueError:
             flash('Data has not the right type')
             return False
 
+        #st = StatMech(mol_id=mol_id, temp=temp, q_trans=q_trans,
+        #        q_rot=q_rot, q_vib=q_vib, q_elec=q_elec)
         st = StatMech(mol_id=mol_id, temp=temp, q_trans=q_trans,
-                q_rot=q_rot, q_vib=q_vib, q_elec=q_elec)
+                q_rot=q_rot)
         #try:
         db.session.add(st)
         #except:
@@ -133,8 +135,8 @@ def plot(mol_id):
 
     data_trans = {"temp": [], "q": []}
     data_rot = {"temp": [], "q": []}
-    data_vib = {"temp": [], "q": []}
-    data_elec = {"temp": [], "q": []}
+    #data_vib = {"temp": [], "q": []}
+    #data_elec = {"temp": [], "q": []}
     if mol:
         sts = None
         sts = StatMech.query.filter_by(mol_id=mol_id).order_by(StatMech.temp).all()
@@ -143,10 +145,10 @@ def plot(mol_id):
             data_trans["q"].append(st.q_trans)
             data_rot["temp"].append(st.temp)
             data_rot["q"].append(st.q_rot)
-            data_vib["temp"].append(st.temp)
-            data_vib["q"].append(st.q_vib)
-            data_elec["temp"].append(st.temp)
-            data_elec["q"].append(st.q_elec)
+            #data_vib["temp"].append(st.temp)
+            #data_vib["q"].append(st.q_vib)
+            #data_elec["temp"].append(st.temp)
+            #data_elec["q"].append(st.q_elec)
 
         graph = [
                 dict(
@@ -162,16 +164,17 @@ def plot(mol_id):
                     y=data_rot["q"],
                     name="q rot",
                     ),
-                dict(
-                    x=data_vib["temp"],
-                    y=data_vib["q"],
-                    name="q vib",
-                    ),
-                dict(
-                    x=data_elec["temp"],
-                    y=data_elec["q"],
-                    name="q elec",
-                    )]
+                #dict(
+                #    x=data_vib["temp"],
+                #    y=data_vib["q"],
+                #    name="q vib",
+                #    ),
+                #dict(
+                #    x=data_elec["temp"],
+                #    y=data_elec["q"],
+                #    name="q elec",
+                #    )
+        ]
 
         data = json.dumps(graph)
 

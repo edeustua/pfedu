@@ -29,14 +29,14 @@ class UserForm(FlaskForm):
 class StatMechForm(FlaskForm):
     temp = StringField(r'Temperature')
     #        validators=[DataRequired()])
-    q_trans = StringField(r'q<sub>trans</sub>',
+    q_trans = StringField(r'q<sub>trans</sub>/V',
             validators=[DataRequired()])
     q_rot = StringField(r'q<sub>rot</sub>',
             validators=[DataRequired()])
-    q_vib = StringField(r'q<sub>vib</sub>',
-            validators=[DataRequired()])
-    q_elec = StringField(r'q<sub>elec</sub>',
-            validators=[DataRequired()])
+    #q_vib = StringField(r'q<sub>vib</sub>',
+    #        validators=[DataRequired()])
+    #q_elec = StringField(r'q<sub>elec</sub>',
+    #        validators=[DataRequired()])
     submit = SubmitField('Submit data')
 
     def validate_temp(self, temp):
@@ -58,14 +58,14 @@ class StatMechForm(FlaskForm):
         except ValueError:
             raise ValidationError(r'\(q_\text{rot}\) needs to be a number')
 
-    def validate_q_vib(self, q_vib):
-        try:
-            float(q_vib.data)
-        except ValueError:
-            raise ValidationError(r'\(q_\text{vib}\) needs to be a number')
-
-    def validate_q_elec(self, q_elec):
-        try:
-            float(q_elec.data)
-        except ValueError:
-            raise ValidationError(r'\(q_\text{elec}\) needs to be a number')
+#    def validate_q_vib(self, q_vib):
+#        try:
+#            float(q_vib.data)
+#        except ValueError:
+#            raise ValidationError(r'\(q_\text{vib}\) needs to be a number')
+#
+#    def validate_q_elec(self, q_elec):
+#        try:
+#            float(q_elec.data)
+#        except ValueError:
+#            raise ValidationError(r'\(q_\text{elec}\) needs to be a number')

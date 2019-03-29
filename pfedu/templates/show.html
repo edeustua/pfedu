@@ -5,10 +5,10 @@
   <thead>
     <tr>
       <th>T(K)</th>
-      <th>q<sub>trans</sub></th>
+      <th>q<sub>trans</sub>/V</th>
       <th>q<sub>rot</sub></th>
-      <th>q<sub>vib</sub></th>
-      <th>q<sub>elec</sub></th>
+<!--      <th>q<sub>vib</sub></th>
+<th>q<sub>elec</sub></th> -->
       <th>Action</th>
     </tr>
   </thead>
@@ -18,8 +18,6 @@
       <td>{{ st.temp }}</td>
       <td>{{ '%.4E' | format(st.q_trans) }}</td>
       <td>{{ '%.4E' | format(st.q_rot) }}</td>
-      <td>{{ '%.4E' | format(st.q_vib) }}</td>
-      <td>{{ '%.4E' | format(st.q_elec) }}</td>
       <td>
         {% if st.temp|int == current_user.username|int or current_user.admin %}
         <a href="{{ url_for('routes.edit', mol_id=mol.id, st_id=st.id) }}">Edit</a>
@@ -29,7 +27,7 @@
     </tr>
     {% else %}
     <tr>
-      <td colspan=7><em>There are no entries</em></td>
+      <td colspan=5><em>There are no entries</em></td>
     </tr>
     {% endfor %}
   </tbody>
@@ -44,7 +42,7 @@
       // Disable ordering on the Action column
       {
         "columnDefs": [
-          { "orderable": false, "targets": 5 }
+          { "orderable": false, "targets": 3 }
         ]
       }
     );

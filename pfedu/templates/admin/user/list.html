@@ -4,22 +4,26 @@
 <a href="{{ url_for('admin.add_user') }}">Add users</a>
 <a href="{{ url_for('admin.delete_user_all') }}">Delete all</a>
 <table id="table_users" class="display entries">
-  <tr>
-    <th>User (temperature)</th>
-    <th>Action</th>
-  </tr>
-  {% for user in users %}
-  <tr>
-    <td>{{ user.username }}</td>
-    <td>
-      <a href="{{ url_for('admin.delete_user', user_id=user.id) }}">Delete</a>
-    </td>
-  </tr>
-  {% else %}
-  <tr>
-    <td colspan=7><em>There are no entries</em></td>
-  </tr>
-  {% endfor %}
+  <thead>
+    <tr>
+      <th>User (temperature)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.username }}</td>
+      <td>
+        <a href="{{ url_for('admin.delete_user', user_id=user.id) }}">Delete</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan=2><em>There are no entries</em></td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 <a href="{{ url_for('admin.add_mol') }}">Add users</a>
 <a href="{{ url_for('admin.delete_user_all') }}">Delete all</a>

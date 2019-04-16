@@ -33,6 +33,22 @@
       {% endfor %}
     </div>
   </div>
+  <div class="row">
+    <div class="six columns">
+      {{ form.q_vib.label }}
+      {{ form.q_vib(size=32) }}
+      {% for error in form.q_vib.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="six columns">
+      {{ form.q_elec.label }}
+      {{ form.q_elec(size=32) }}
+      {% for error in form.q_elec.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
 
   <div class="row">
     {{ form.submit(class_="button-primary", value="Add") }}

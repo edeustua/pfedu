@@ -78,6 +78,13 @@ def add(mol_id):
     mols = Molecule.query.all()
     mol = Molecule.query.filter_by(id=mol_id).first()
 
+    # If record already exists, reroute to edit
+    temp = float(current_user.username)
+    st = StatMech.query.filter_by(temp=temp).first()
+    if st:
+        return redirect(url_for('routes.edit',mol_id=mol_id,
+            st_id=st.id))
+
     form = StatMechForm()
     # Check for submission
     if form.validate_on_submit():

@@ -72,18 +72,24 @@ def process(mol_id, form, st=None):
     return True
 
 
+# Add a new entry. If one already exists (with the same temperature)
+# goto edit instead.
 @bp.route('/add/<int:mol_id>', methods=('GET', 'POST'))
 @login_required
 def add(mol_id):
     mols = Molecule.query.all()
     mol = Molecule.query.filter_by(id=mol_id).first()
 
-    # If record already exists, reroute to edit
-    temp = float(current_user.username)
-    st = StatMech.query.filter_by(temp=temp).first()
-    if st:
-        return redirect(url_for('routes.edit',mol_id=mol_id,
-            st_id=st.id))
+    # If temperature record already exists, reroute to edit
+    # Make sure that this is not an admin account first
+    if not current_user.admin:
+        temp = float(current_user.username)
+        st = StatMech.query.filter_by(temp=temp).first()
+
+        if st:
+            flash('A record with your temperature exists. Editing instead.')
+            return redirect(url_for('routes.edit', mol_id=mol_id,
+                st_id=st.id))
 
     form = StatMechForm()
     # Check for submission

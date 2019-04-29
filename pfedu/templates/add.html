@@ -50,6 +50,34 @@
     </div>
   </div>
 
+  <!-- Deltas -->
+  <div class="row">
+    <div class="six columns">
+      {{ form.delta_g.label }}
+      {{ form.delta_g(size=32) }}
+      {% for error in form.delta_g.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+    <div class="six columns">
+      {{ form.delta_h.label }}
+      {{ form.delta_h(size=32) }}
+      {% for error in form.delta_h.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="six columns">
+      {{ form.delta_s.label }}
+      {{ form.delta_s(size=32) }}
+      {% for error in form.delta_s.errors %}
+      <br /><span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </div>
+  </div>
+
   <div class="row">
     {{ form.submit(class_="button-primary", value="Add") }}
   </div>

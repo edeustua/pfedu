@@ -9,6 +9,9 @@
       <th>q<sub>rot</sub></th>
       <th>q<sub>vib</sub></th>
       <th>q<sub>elec</sub></th>
+      <th>&Delta;G<sup>0</sup></th>
+      <th>&Delta;H<sup>0</sup></th>
+      <th>&Delta;S</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -26,6 +29,21 @@
       <td>
         {% if st.q_elec is not none %}
         {{ '%.4E' | format(st.q_elec) }}
+        {% endif %}
+      </td>
+      <td>
+        {% if st.delta_g is not none %}
+        {{ '%.4E' | format(st.delta_g) }}
+        {% endif %}
+      </td>
+      <td>
+        {% if st.delta_h is not none %}
+        {{ '%.4E' | format(st.delta_h) }}
+        {% endif %}
+      </td>
+      <td>
+        {% if st.delta_s is not none %}
+        {{ '%.4E' | format(st.delta_s) }}
         {% endif %}
       </td>
       <td>
@@ -52,7 +70,7 @@
       // Disable ordering on the Action column
       {
         "columnDefs": [
-          { "orderable": false, "targets": 5 }
+          { "orderable": false, "targets": 8 }
         ]
       }
     );

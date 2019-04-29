@@ -45,6 +45,9 @@ def process(mol_id, form, st=None):
         st.q_rot = float(form.q_rot.data)
         st.q_vib = float(form.q_vib.data)
         st.q_elec = float(form.q_elec.data)
+        st.delta_g = float(form.delta_g.data)
+        st.delta_h = float(form.delta_h.data)
+        st.delta_s = float(form.delta_s.data)
         st.user_id = current_user.id
 
     else:
@@ -53,13 +56,17 @@ def process(mol_id, form, st=None):
             q_rot = float(form.q_rot.data)
             q_vib = float(form.q_vib.data)
             q_elec = float(form.q_elec.data)
+            delta_g = float(form.delta_g.data)
+            delta_h = float(form.delta_h.data)
+            delta_s = float(form.delta_s.data)
             user_id = current_user.id
         except ValueError:
             flash('Data has not the right type')
             return False
 
         st = StatMech(mol_id=mol_id, temp=temp, q_trans=q_trans,
-                q_rot=q_rot, q_vib=q_vib, q_elec=q_elec)
+                q_rot=q_rot, q_vib=q_vib, q_elec=q_elec,
+                delta_g=delta_g, delta_h=delta_h, delta_s=delta_s)
         #st = StatMech(mol_id=mol_id, temp=temp, q_trans=q_trans,
         #        q_rot=q_rot)
         #try:
@@ -150,6 +157,10 @@ def plot(mol_id):
     data_rot = {"temp": [], "q": []}
     data_vib = {"temp": [], "q": []}
     data_elec = {"temp": [], "q": []}
+    data_delta_g = {"temp": [], "d": []}
+    data_delta_h = {"temp": [], "d": []}
+    data_delta_s = {"temp": [], "d": []}
+
     if mol:
         sts = None
         sts = StatMech.query.filter_by(mol_id=mol_id).order_by(StatMech.temp).all()
@@ -162,6 +173,13 @@ def plot(mol_id):
             data_vib["q"].append(st.q_vib)
             data_elec["temp"].append(st.temp)
             data_elec["q"].append(st.q_elec)
+
+            data_delta_g["temp"].append(st.temp)
+            data_delta_g["d"].append(st.delta_g)
+            data_delta_h["temp"].append(st.temp)
+            data_delta_h["d"].append(st.delta_h)
+            data_delta_s["temp"].append(st.temp)
+            data_delta_s["d"].append(st.delta_s)
 
         graph = [
                 dict(
@@ -186,6 +204,21 @@ def plot(mol_id):
                     x=data_elec["temp"],
                     y=data_elec["q"],
                     name="q elec",
+                    ),
+                dict(
+                    x=data_delta_g["temp"],
+                    y=data_delta_g["d"],
+                    name=r"$\Delta G^0$",
+                    ),
+                dict(
+                    x=data_delta_h["temp"],
+                    y=data_delta_h["d"],
+                    name=r"$\Delta H^0$",
+                    ),
+                dict(
+                    x=data_delta_s["temp"],
+                    y=data_delta_s["d"],
+                    name=r"$\Delta S$",
                     )
         ]
 

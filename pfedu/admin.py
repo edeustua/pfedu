@@ -60,13 +60,13 @@ def get_data(mol_id):
     sts = StatMech.query.filter_by(mol_id=mol_id).all()
     data = []
     for st in sts:
-        #data.append([st.temp, st.q_trans, st.q_rot, st.q_vib,
-        #    st.q_elec])
-        data.append([st.temp, st.q_trans, st.q_rot])
+        data.append([st.temp, st.q_trans, st.q_rot, st.q_vib,
+            st.q_elec, st.delta_g, st.delta_h, st.delta_s])
+        #data.append([st.temp, st.q_trans, st.q_rot])
     #df = pd.DataFrame(data=data,columns=['temperature', 'q_trans',
     #'q_rot', 'q_vib', 'q_elec'])
     df = pd.DataFrame(data=data,columns=['temperature', 'q_trans',
-    'q_rot'])
+    'q_rot', 'q_vib', 'q_elec', 'delta_g', 'delta_h', 'delta_s'])
     df = df.set_index('temperature')
     df = df.sort_index()
 
@@ -91,14 +91,13 @@ def get_data_all():
         for mol in mols:
             sts = StatMech.query.filter_by(mol_id=mol.id).all()
             data = []
+
             for st in sts:
-                #data.append([st.temp, st.q_trans, st.q_rot, st.q_vib,
-                #    st.q_elec])
-                data.append([st.temp, st.q_trans, st.q_rot])
-            #df = pd.DataFrame(data=data,columns=['temperature', 'q_trans',
-            #'q_rot', 'q_vib', 'q_elec'])
+                data.append([st.temp, st.q_trans, st.q_rot, st.q_vib,
+                    st.q_elec, st.delta_g, st.delta_h, st.delta_s])
+
             df = pd.DataFrame(data=data,columns=['temperature', 'q_trans',
-            'q_rot'])
+            'q_rot', 'q_vib', 'q_elec', 'delta_g', 'delta_h', 'delta_s'])
             df = df.set_index('temperature')
             df = df.sort_index()
             z.writestr(mol.name+".csv", df.to_csv())

@@ -37,6 +37,12 @@ class StatMechForm(FlaskForm):
             validators=[DataRequired()])
     q_elec = StringField(r'q<sub>elec</sub>',
             validators=[DataRequired()])
+    delta_g = StringField(r'&Delta;G<sup>0</sup>',
+            validators=[DataRequired()])
+    delta_h = StringField(r'&Delta;H<sup>0</sup>',
+            validators=[DataRequired()])
+    delta_s = StringField(r'&Delta;S',
+            validators=[DataRequired()])
     submit = SubmitField('Submit data')
 
     def validate_temp(self, temp):
@@ -69,3 +75,21 @@ class StatMechForm(FlaskForm):
             float(q_elec.data)
         except ValueError:
             raise ValidationError(r'\(q_\text{elec}\) needs to be a number')
+
+    def validate_delta_g(self, delta_g):
+        try:
+            float(delta_g.data)
+        except ValueError:
+            raise ValidationError(r'\(\Delta G^0\) needs to be a number')
+
+    def validate_delta_h(self, delta_h):
+        try:
+            float(delta_h.data)
+        except ValueError:
+            raise ValidationError(r'\(\Delta H^0\) needs to be a number')
+
+    def validate_delta_s(self, delta_s):
+        try:
+            float(delta_s.data)
+        except ValueError:
+            raise ValidationError(r'\(\Delta S\) needs to be a number')

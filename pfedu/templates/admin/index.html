@@ -14,6 +14,7 @@
   {% for mol in mols %}
   <li><a class="button" href="{{ url_for('admin.get_data', mol_id=mol.id) }}">{{ mol.name }}</a></li>
   {% endfor %}
+  <li><a class="button" href="{{ url_for('admin.get_data_reaction') }}">Reaction</a></li>
 </ul>
 
 <p>or in a zip file containing all molecules.</p>

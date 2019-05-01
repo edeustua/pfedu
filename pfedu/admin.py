@@ -7,7 +7,7 @@ from flask import (
 from flask_login import login_required, current_user
 
 from pfedu.forms import UserForm, MoleculeForm, PasswdForm
-from pfedu.models import db, Molecule, StatMech, User
+from pfedu.models import db, Molecule, StatMech, User, Reaction
 
 from datetime import datetime
 import zipfile
@@ -77,6 +77,32 @@ def get_data(mol_id):
     res.headers["Content-Type"] = "text/csv"
     return res
 
+@bp.route('/get_data_reaction')
+@login_required
+def get_data_reaction():
+    if not current_user.admin:
+        return redirect(url_for('index'))
+
+    # Generate CSV
+    reacs = Reaction.query.all()
+    data = []
+    for reac in reacs:
+        data.append([reac.temp, reac.delta_g, reac.delta_h,
+            reac.delta_s, reac.k_p])
+
+    df = pd.DataFrame(data=data,columns=['temperature', 'delta_g',
+    'delta_h', 'delta_s', 'k_p'])
+    df = df.set_index('temperature')
+    df = df.sort_index()
+
+    res = make_response(df.to_csv())
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
+    res.headers["Content-Disposition"] = \
+            "attachment; filename=cem484_{}_{}.csv".format('reaction', timestamp)
+    res.headers["Content-Type"] = "text/csv"
+    return res
+
+
 @bp.route('/get_data_all')
 @login_required
 def get_data_all():
@@ -103,6 +129,20 @@ def get_data_all():
             df = df.sort_index()
             z.writestr(mol.name+".csv", df.to_csv())
 
+        # Generate reaction CSV
+        reacs = Reaction.query.all()
+        data = []
+        for reac in reacs:
+            data.append([reac.temp, reac.delta_g, reac.delta_h,
+                reac.delta_s, reac.k_p])
+
+        df = pd.DataFrame(data=data,columns=['temperature', 'delta_g',
+        'delta_h', 'delta_s', 'k_p'])
+        df = df.set_index('temperature')
+        df = df.sort_index()
+        z.writestr("reaction.csv", df.to_csv())
+
+    # Zip all files and send them to the user
     zip_file.seek(0)
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
     return send_file(zip_file,

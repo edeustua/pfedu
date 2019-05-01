@@ -58,6 +58,19 @@ class StatMech(db.Model):
     def __repr__(self):
         return '<StatMech {}, {}>'.format(self.id, self.timestamp)
 
+class Reaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True,
+            default=datetime.utcnow)
+    temp = db.Column(db.Float)
+    delta_g = db.Column(db.Float)
+    delta_h = db.Column(db.Float)
+    delta_s = db.Column(db.Float)
+    k_p = db.Column(db.Float)
+
+    def __repr__(self):
+        return '<Reaction {}, {}>'.format(self.id, self.temp)
+
 
 # Database management
 def init_db():

@@ -1,37 +1,29 @@
 {% extends "base.html" %}
 {% block body %}
-<h3>List {{ mol.html|safe }}</h3>
+<h3>Reaction</h3>
 <table id="table_test" class="display entries">
   <thead>
     <tr>
       <th>T(K)</th>
-      <th>q<sub>trans</sub>/V</th>
-      <th>q<sub>rot</sub></th>
-      <th>q<sub>vib</sub></th>
-      <th>q<sub>elec</sub></th>
+      <th>&Delta; G<sup>0</sup></th>
+      <th>&Delta; H<sup>0</sup></th>
+      <th>&Delta; S</th>
+      <th>K<sub>P</sub></th>
       <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    {% for st in sts %}
+    {% for reac in reacs %}
     <tr>
-      <td>{{ st.temp }}</td>
-      <td>{{ '%.4E' | format(st.q_trans) }}</td>
-      <td>{{ '%.4E' | format(st.q_rot) }}</td>
+      <td>{{ reac.temp }}</td>
+      <td>{{ '%.4E' | format(reac.delta_g) }}</td>
+      <td>{{ '%.4E' | format(reac.delta_h) }}</td>
+      <td>{{ '%.4E' | format(reac.delta_s) }}</td>
+      <td>{{ '%.4E' | format(reac.k_p) }}</td>
       <td>
-        {% if st.q_vib is not none %}
-        {{ '%.4E' | format(st.q_vib) }}
-        {% endif %}
-      </td>
-      <td>
-        {% if st.q_elec is not none %}
-        {{ '%.4E' | format(st.q_elec) }}
-        {% endif %}
-      </td>
-      <td>
-        {% if st.temp|int == current_user.username|int or current_user.admin %}
-        <a href="{{ url_for('routes.edit', mol_id=mol.id, st_id=st.id) }}">Edit</a>
-        <a href="{{ url_for('routes.delete', mol_id=mol.id, st_id=st.id) }}">Delete</a>
+        {% if reac.temp|int == current_user.username|int or current_user.admin %}
+        <a href="{{ url_for('routes.edit_reaction', reac_id=reac.id) }}">Edit</a>
+        <a href="{{ url_for('routes.delete_reaction', reac_id=reac.id) }}">Delete</a>
         {% endif %}
       </td>
     </tr>
@@ -42,7 +34,7 @@
     {% endfor %}
   </tbody>
 </table>
-<a href="{{ url_for('routes.add', mol_id=mol.id) }}">Add entry</a>
+{#<a href="{{ url_for('routes.add', mol_id=mol.id) }}">Add entry</a> #}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>

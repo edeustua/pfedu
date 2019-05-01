@@ -2,6 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 
+def validate_float(form, field):
+    try:
+        float(field.data)
+    except ValueError:
+        raise ValidationError(
+                '{} needs to be a number'.format(field.short_name))
+
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     passwd = PasswordField('Password', validators=[DataRequired()])
@@ -37,12 +45,6 @@ class StatMechForm(FlaskForm):
             validators=[DataRequired()])
     q_elec = StringField(r'q<sub>elec</sub>',
             validators=[DataRequired()])
-    delta_g = StringField(r'&Delta;G<sup>0</sup>',
-            validators=[DataRequired()])
-    delta_h = StringField(r'&Delta;H<sup>0</sup>',
-            validators=[DataRequired()])
-    delta_s = StringField(r'&Delta;S',
-            validators=[DataRequired()])
     submit = SubmitField('Submit data')
 
     def validate_temp(self, temp):
@@ -76,20 +78,15 @@ class StatMechForm(FlaskForm):
         except ValueError:
             raise ValidationError(r'\(q_\text{elec}\) needs to be a number')
 
-    def validate_delta_g(self, delta_g):
-        try:
-            float(delta_g.data)
-        except ValueError:
-            raise ValidationError(r'\(\Delta G^0\) needs to be a number')
-
-    def validate_delta_h(self, delta_h):
-        try:
-            float(delta_h.data)
-        except ValueError:
-            raise ValidationError(r'\(\Delta H^0\) needs to be a number')
-
-    def validate_delta_s(self, delta_s):
-        try:
-            float(delta_s.data)
-        except ValueError:
-            raise ValidationError(r'\(\Delta S\) needs to be a number')
+class ReactionForm(FlaskForm):
+    temp = StringField(r'Temperature')
+    #        validators=[DataRequired()])
+    delta_g = StringField(r'&Delta; G<sup>0</sub>',
+            validators=[DataRequired(), validate_float])
+    delta_h = StringField(r'&Delta; H<sup>0</sub>',
+            validators=[DataRequired(), validate_float])
+    delta_s = StringField(r'&Delta; S',
+            validators=[DataRequired(), validate_float])
+    k_p = StringField(r'K<sub>P</sub>',
+            validators=[DataRequired(), validate_float])
+    submit = SubmitField('Submit data')

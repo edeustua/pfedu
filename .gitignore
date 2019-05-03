@@ -16,3 +16,6 @@ build/
 # www config
 cem484.ini
 install.sh
+
+# For VS code
+.vscode

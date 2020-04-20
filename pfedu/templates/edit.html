@@ -36,6 +36,7 @@
       {% endfor %}
     </div>
   </div>
+	{% if 'q_vib' in form and 'q_elec' in form %}
   <div class="row">
     <div class="six columns">
       {{ form.q_vib.label }}
@@ -52,6 +53,7 @@
       {% endfor %}
     </div>
   </div>
+	{% endif %}
 
   <div class="row">
     {{ form.submit(class_="button-primary", value="Edit") }}

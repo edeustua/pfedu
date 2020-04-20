@@ -43,7 +43,7 @@ class StatMechForm(FlaskForm):
             validators=[DataRequired()])
     q_vib = StringField(r'q<sub>vib</sub>',
             validators=[DataRequired()])
-    q_elec = StringField(r'q<sub>elec</sub>',
+    q_elec = StringField(r'ln q<sub>elec</sub>',
             validators=[DataRequired()])
     submit = SubmitField('Submit data')
 

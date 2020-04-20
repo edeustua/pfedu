@@ -1,5 +1,6 @@
 from flask import (
-        Blueprint, Flask, request, session, g, redirect, url_for, abort,  render_template, flash
+        Blueprint, Flask, request, session, g,
+        redirect, url_for, abort,  render_template, flash,
         )
 
 from flask_login import login_required, current_user
@@ -211,6 +212,8 @@ def process(mol_id, form, st=None):
         st.q_rot = float(form.q_rot.data)
         st.q_vib = float(form.q_vib.data)
         st.q_elec = float(form.q_elec.data)
+        #st.q_vib = 0.0
+        #st.q_elec = 0.0
         st.user_id = current_user.id
 
     else:
@@ -219,6 +222,8 @@ def process(mol_id, form, st=None):
             q_rot = float(form.q_rot.data)
             q_vib = float(form.q_vib.data)
             q_elec = float(form.q_elec.data)
+            #q_vib = 0.0
+            #q_elec = 0.0
             user_id = current_user.id
         except ValueError:
             flash('Data has not the right type')
@@ -250,7 +255,7 @@ def add(mol_id):
     # Make sure that this is not an admin account first
     if not current_user.admin:
         temp = float(current_user.username)
-        st = StatMech.query.filter_by(temp=temp).first()
+        st = StatMech.query.filter_by(temp=temp).filter_by(mol_id=mol_id).first()
 
         if st:
             flash('A record with your temperature exists. Editing instead.')
@@ -258,6 +263,8 @@ def add(mol_id):
                 st_id=st.id))
 
     form = StatMechForm()
+    #del form.q_vib
+    #del form.q_elec
     # Check for submission
     if form.validate_on_submit():
 
@@ -278,6 +285,8 @@ def edit(mol_id, st_id):
         return redirect(url_for('routes.show', mol_id=mol_id))
 
     form = StatMechForm(obj=st)
+    #del form.q_vib
+    #del form.q_elec
     # Check for submission
     if form.validate_on_submit():
         if process(mol_id, form, st):

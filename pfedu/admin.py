@@ -7,7 +7,8 @@ from flask import (
 from flask_login import login_required, current_user
 
 from pfedu.forms import UserForm, MoleculeForm, PasswdForm
-from pfedu.models import db, Molecule, StatMech, User, Reaction
+from pfedu.models import db, Molecule, StatMech, User, Reaction, \
+        ReactionB
 
 from datetime import datetime
 import zipfile
@@ -77,14 +78,17 @@ def get_data(mol_id):
     res.headers["Content-Type"] = "text/csv"
     return res
 
-@bp.route('/get_data_reaction')
+@bp.route('/get_data_reaction/<reaction>')
 @login_required
-def get_data_reaction():
+def get_data_reaction(reaction):
     if not current_user.admin:
         return redirect(url_for('index'))
 
     # Generate CSV
-    reacs = Reaction.query.all()
+    if reaction == 'a':
+        reacs = Reaction.query.all()
+    elif reaction == 'b':
+        reacs = ReactionB.query.all()
     data = []
     for reac in reacs:
         data.append([reac.temp, reac.delta_g, reac.delta_h,
@@ -140,7 +144,20 @@ def get_data_all():
         'delta_h', 'delta_s', 'k_p'])
         df = df.set_index('temperature')
         df = df.sort_index()
-        z.writestr("reaction.csv", df.to_csv())
+        z.writestr("reaction_a.csv", df.to_csv())
+
+        # Generate reaction CSV
+        reacs = ReactionB.query.all()
+        data = []
+        for reac in reacs:
+            data.append([reac.temp, reac.delta_g, reac.delta_h,
+                reac.delta_s, reac.k_p])
+
+        df = pd.DataFrame(data=data,columns=['temperature', 'delta_g',
+        'delta_h', 'delta_s', 'k_p'])
+        df = df.set_index('temperature')
+        df = df.sort_index()
+        z.writestr("reaction_b.csv", df.to_csv())
 
     # Zip all files and send them to the user
     zip_file.seek(0)

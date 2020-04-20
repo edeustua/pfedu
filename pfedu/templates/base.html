@@ -56,11 +56,16 @@
                       </a>
                     </li>
                     {% endfor %}
-		    <li class="popover-item">
-		    <a class="popover-link" href="{{ url_for('routes.reaction') }}">
-		    Reaction
-		    </a>
-		    </li>
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.reaction', reaction='a') }}">
+                        Reaction A
+                      </a>
+                    </li>
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.reaction', reaction='b') }}">
+                        Reaction B
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -77,11 +82,16 @@
                       </a>
                     </li>
                     {% endfor %}
-                    <!--<li class="popover-item">
-                      <a class="popover-link" href="{{ url_for('routes.add_reaction') }}">
-                        Reaction
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.add_reaction', reaction='a') }}">
+                        Reaction A
                       </a>
-										</li>-->
+										</li>
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.add_reaction', reaction='b') }}">
+                        Reaction B
+                      </a>
+										</li>
                   </ul>
                 </div>
               </li>
@@ -98,11 +108,15 @@
                       </a>
                     </li>
                     {% endfor %}
-                    <!-- <li class="popover-item">
-                      <a class="popover-link" href="{{ url_for('routes.plot_reaction') }}">
-                        Reaction
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.plot_reaction', reaction='a') }}">
+                        Reaction A
                       </a>
-										</li>-->
+										</li>
+                    <li class="popover-item">
+                      <a class="popover-link" href="{{ url_for('routes.plot_reaction', reaction='b') }}">
+                        Reaction B
+                      </a>
                   </ul>
                 </div>
               </li>

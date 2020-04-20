@@ -6,7 +6,7 @@ from flask import (
 from flask_login import login_required, current_user
 
 from pfedu.forms import StatMechForm, ReactionForm
-from pfedu.models import db, Molecule, StatMech, Reaction
+from pfedu.models import db, Molecule, StatMech, Reaction, ReactionB
 import json
 
 bp = Blueprint('routes', __name__)
@@ -37,28 +37,35 @@ def show(mol_id):
 # Reaction routes
 
 # Show reaction thermodynamic parameters
-@bp.route('/reaction')
+@bp.route('/reaction/<reaction>')
 @login_required
-def reaction():
-    reacs = Reaction.query.order_by(Reaction.temp).all()
+def reaction(reaction):
+    if reaction == 'a':
+        reacs = Reaction.query.order_by(Reaction.temp).all()
+    elif reaction == 'b':
+        reacs = ReactionB.query.order_by(ReactionB.temp).all()
     mols = Molecule.query.all()
-    return render_template('reaction.html', reacs=reacs, mols=mols)
+    return render_template('reaction.html', reaction=reaction, reacs=reacs, mols=mols)
 
 
-@bp.route('/add_reaction', methods=('GET', 'POST'))
+@bp.route('/add_reaction/<reaction>', methods=('GET', 'POST'))
 @login_required
-def add_reaction():
+def add_reaction(reaction):
     mols = Molecule.query.all()
 
     # If temperature record already exists, reroute to edit
     # Make sure that this is not an admin account first
     if not current_user.admin:
         temp = float(current_user.username)
-        reac = Reaction.query.filter_by(temp=temp).first()
+        if reaction == 'a':
+            reac = Reaction.query.filter_by(temp=temp).first()
+        elif reaction == 'b':
+            reac = ReactionB.query.filter_by(temp=temp).first()
 
         if reac:
             flash('A record with your temperature exists. Editing instead.')
             return redirect(url_for('routes.edit_reaction',
+                reaction=reaction,
                 reac_id=reac.id))
 
     form = ReactionForm()
@@ -76,31 +83,39 @@ def add_reaction():
         delta_s = float(form.delta_s.data)
         k_p = float(form.k_p.data)
 
-        reac = Reaction(temp=temp, delta_g=delta_g, delta_h=delta_h,
-                delta_s=delta_s, k_p=k_p)
+        if reaction == 'a':
+            reac = Reaction(temp=temp, delta_g=delta_g, delta_h=delta_h,
+                    delta_s=delta_s, k_p=k_p)
+        elif reaction == 'b':
+            reac = ReactionB(temp=temp, delta_g=delta_g, delta_h=delta_h,
+                    delta_s=delta_s, k_p=k_p)
 
         db.session.add(reac)
         db.session.commit()
         flash('Your entry has been added!')
-        return redirect(url_for('routes.reaction'))
+        return redirect(url_for('routes.reaction', reaction=reaction))
 
 
     #    if process(mol_id, form):
     #        flash('Your entry has been added!')
     #        return redirect(url_for('routes.show', mol_id=mol_id))
 
-    return render_template('add_reaction.html', mols=mols, form=form)
+    return render_template('add_reaction.html', mols=mols, form=form,
+            reaction=reaction)
 
-@bp.route('/edit_reaction/<int:reac_id>', methods=('GET', 'POST'))
+@bp.route('/edit_reaction/<reaction>/<int:reac_id>', methods=('GET', 'POST'))
 @login_required
-def edit_reaction(reac_id):
+def edit_reaction(reaction, reac_id):
     mols = Molecule.query.all()
 
     # Query reaction data
-    reac = Reaction.query.get(reac_id)
+    if reaction == 'a':
+        reac = Reaction.query.get(reac_id)
+    elif reaction == 'b':
+        reac = ReactionB.query.get(reac_id)
     if not reac:
         flash("Can't find entry")
-        return redirect(url_for('routes.reaction'))
+        return redirect(url_for('routes.reaction', reaction=reaction))
 
 
     # Load data into form
@@ -122,15 +137,21 @@ def edit_reaction(reac_id):
 
         db.session.commit()
         flash('Your entry has been edited!')
-        return redirect(url_for('routes.reaction'))
+        return redirect(url_for('routes.reaction', reaction=reaction))
 
-    return render_template('edit_reaction.html', mols=mols, form=form,
+    return render_template('edit_reaction.html', reaction=reaction, mols=mols, form=form,
             reac_id=reac_id)
 
-@bp.route('/delete_reaction/<int:reac_id>')
+@bp.route('/delete_reaction/<reaction>/<int:reac_id>')
 @login_required
-def delete_reaction(reac_id):
-    reac = Reaction.query.get(reac_id)
+def delete_reaction(reaction, reac_id):
+    if reaction == 'a':
+        reac = Reaction.query.get(reac_id)
+    elif reaction == 'b':
+        reac = ReactionB.query.get(reac_id)
+
+    # add temperature failsafe, so that people can't delete each
+    # others stuff
     if not current_user.admin:
         if int(reac.temp) == int(current_user.username):
             flash('Entry deleted')
@@ -141,11 +162,11 @@ def delete_reaction(reac_id):
         db.session.delete(reac)
         db.session.commit()
 
-    return redirect(url_for('routes.reaction'))
+    return redirect(url_for('routes.reaction', reaction=reaction))
 
-@bp.route('/plot_reaction')
+@bp.route('/plot_reaction/<reaction>')
 @login_required
-def plot_reaction():
+def plot_reaction(reaction):
     mols = Molecule.query.all()
 
     data_delta_g = {"temp": [], "d": []}
@@ -153,7 +174,10 @@ def plot_reaction():
     data_delta_s = {"temp": [], "d": []}
     data_k_p = {"temp": [], "d": []}
 
-    reacs = Reaction.query.order_by(Reaction.temp).all()
+    if reaction == 'a':
+        reacs = Reaction.query.order_by(Reaction.temp).all()
+    elif reaction == 'b':
+        reacs = ReactionB.query.order_by(ReactionB.temp).all()
     for reac in reacs:
         data_delta_g["temp"].append(reac.temp)
         data_delta_g["d"].append(reac.delta_g)
@@ -192,7 +216,7 @@ def plot_reaction():
 
     data = json.dumps(graph)
 
-    return render_template('plot_reaction.html', mols=mols,
+    return render_template('plot_reaction.html', reaction=reaction, mols=mols,
             data=data)
 
 

@@ -2,7 +2,7 @@
 {% block body %}
 <h3>Add Reaction</h3>
 <p>Fill in all the fields below. You can enter numbers using big E notation (e.g. if you want to enter 3.023 x 10<sup>8</sup> write 3.023E8).</p>
-<form action="{{ url_for('routes.add_reaction') }}" method=post class=add-entry>
+<form action="{{ url_for('routes.add_reaction', reaction=reaction) }}" method=post class=add-entry>
   {{ form.hidden_tag() }}
 
   {% if current_user.admin %}

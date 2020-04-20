@@ -22,8 +22,8 @@
       <td>{{ '%.4E' | format(reac.k_p) }}</td>
       <td>
         {% if reac.temp|int == current_user.username|int or current_user.admin %}
-        <a href="{{ url_for('routes.edit_reaction', reac_id=reac.id) }}">Edit</a>
-        <a href="{{ url_for('routes.delete_reaction', reac_id=reac.id) }}">Delete</a>
+        <a href="{{ url_for('routes.edit_reaction', reaction=reaction, reac_id=reac.id) }}">Edit</a>
+        <a href="{{ url_for('routes.delete_reaction', reaction=reaction, reac_id=reac.id) }}">Delete</a>
         {% endif %}
       </td>
     </tr>
